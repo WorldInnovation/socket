@@ -14,15 +14,14 @@ public class Server
 	public static final String ERROR_ECHO_SERVER_MESSAGE = "IOError in echo server:";
 	public static final int BUFFER_CAPACITY = 2048;
 	public static final String ERROR_STOP_ECHO_SERVER_MESSAGE = "IOError when close echo server:";
-	ServerSocket serverSocket;
+	private static final int SOCKET_PORT = 3000;
 
-	public Server(ServerSocket serverSocket)
+	public Server()
 	{
-		this.serverSocket = serverSocket;
 	}
 
 
-	public void echoServerStart()
+	public static void echoServerStart(ServerSocket serverSocket)
 	{
 		try (
 				Socket socket = serverSocket.accept();
@@ -54,7 +53,7 @@ public class Server
 		}
 	}
 
-	public void echoServerStop()
+	public static void echoServerStop(ServerSocket serverSocket)
 	{
 		try
 		{
@@ -67,28 +66,16 @@ public class Server
 	}
 
 
-/*	public static void main(String[] args) throws IOException
+	public static void main(String[] args)
 	{
-		ServerSocket serverSocket = new ServerSocket(3000);
-		Socket socket = serverSocket.accept();
-		//--read
-		InputStream inputStream = socket.getInputStream();
-		byte[] buffer = new byte[50];
-		int count = inputStream.read(buffer);
-
-		StringBuilder stringBuilder = new StringBuilder("echo: ${");
-		char[] echoChar = new char[50];
-		for (int i = 0; i < count; i++)
+		try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT))
 		{
-			echoChar[i] = (char) buffer[i];
+			echoServerStart(serverSocket);
+			echoServerStop(serverSocket);
 		}
-		String echoMessage = new String(echoChar, 0, count);
-
-		stringBuilder.append(echoMessage);
-		stringBuilder.append("}");
-		String echoServer = stringBuilder.toString();
-
-		OutputStream outputStream = socket.getOutputStream();
-		outputStream.write(echoServer.getBytes(StandardCharsets.UTF_8));
-	}*/
+		catch (IOException e)
+		{
+			System.out.println(ERROR_STOP_ECHO_SERVER_MESSAGE + e.getMessage());
+		}
+	}
 }

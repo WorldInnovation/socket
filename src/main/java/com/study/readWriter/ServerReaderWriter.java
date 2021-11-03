@@ -7,6 +7,26 @@ import java.net.Socket;
 
 public class ServerReaderWriter
 {
+	public static final String ERROR_ECHO_SERVER_MESSAGE = "IOError in echo server:";
+	public static final int BUFFER_CAPACITY = 2048;
+	public static final String ERROR_STOP_ECHO_SERVER_MESSAGE = "IOError when close echo server:";
+	ServerSocket serverSocket;
+
+	public ServerReaderWriter(ServerSocket serverSocket)
+	{
+		this.serverSocket = serverSocket;
+	}
+
+
+	public void echoServerStart()
+	{
+/*		try (
+				Socket socket = serverSocket.accept();
+				InputStream inputStream = socket.getInputStream();
+				OutputStream outputStream = socket.getOutputStream();
+		)
+		{
+
 	private static Socket clientSocket;
 	private static ServerSocket server;
 	private static BufferedReader in;
@@ -39,6 +59,6 @@ public class ServerReaderWriter
 			in.close();
 			out.close();
 		}
-
+*/
 	}
 }

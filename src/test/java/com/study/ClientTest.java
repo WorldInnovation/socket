@@ -5,19 +5,21 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.Socket;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.study.Client.echoClientStart;
+import static com.study.Client.echoClientStop;
 
 
 class ClientTest
 {
 
+	private static final String SOCKET_HOST = "localhost";
+	private static final int SOCKET_PORT = 3000;
+
 	@Test
-	void echoClientStart() throws IOException
+	void echoClientStartTest() throws IOException
 	{
-		try (Socket socket = new Socket("localhost", 3000))
-		{
-			Client client = new Client(socket);
-			client.echoClientStart();
-		}
+		Socket socket = new Socket(SOCKET_HOST, SOCKET_PORT);
+		echoClientStart(socket);
+		echoClientStop(socket);
 	}
 }
