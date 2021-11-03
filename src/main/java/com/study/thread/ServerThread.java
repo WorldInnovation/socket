@@ -1,61 +1,77 @@
 package com.study.thread;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 
 public class ServerThread
 {
-	private ServerSocket serverSocket;
+	public static final int SOCKET_PORT = 3000;
+	public static final String ERROR_STOP_ECHO_SERVER_MESSAGE = "IOError when close echo server:";
 
-
-
-	public void start(int port) throws IOException
+	public static void main(String[] args) throws IOException
 	{
-		while (true)
+		try (
+				ServerSocket serverSocket = new ServerSocket(SOCKET_PORT);
+
+		)
 		{
-			new EchoClient(serverSocket.accept()).start();
+			System.out.println("Server start on localhost:3000");
+			while (true)
+			{
+				try (
+						Socket socket = serverSocket.accept();
+				)
+				{
+					System.out.println("Server have got connection:" + socket.getInetAddress().getHostAddress());
+					//ClientHandler clientSocket = new ClientHandler(socket);
+					new Thread(new ClientHandler(socket)).start();
+					System.out.println(socket.getInetAddress().getCanonicalHostName());
+				}
+			}
 		}
 	}
 
-	public void stop() throws IOException
+	private static class ClientHandler implements Runnable
 	{
-		serverSocket.close();
-	}
+		private final Socket clientSocket;
 
-	private static class EchoClient extends Thread
-	{
-		private Socket clientSocket;
-		private BufferedReader in;
-		private PrintWriter out;
-
-		public EchoClient(Socket socket){
+		public ClientHandler(Socket socket){
 			this.clientSocket = socket;
 		}
 
 		public void run()
 		{
-			try
-			{
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				out = new PrintWriter(clientSocket.getOutputStream(), true);
+			System.out.println("Server run");
 
-				String inputLine;
-				while ((inputLine = in.readLine()) != null)
+			try(
+					BufferedReader	in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+					BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+			)
+			{
+				String echoMessage = null;
+				while((echoMessage = in.readLine()) != null)
 				{
-					out.println(inputLine);
+					System.out.println("Server got message:" + echoMessage);
+					StringBuilder stringBuilder = new StringBuilder("echo: ${");
+					stringBuilder.append(echoMessage);
+					stringBuilder.append("}");
+					String echoServer = stringBuilder.toString() + "\n";
+					out.write(echoServer, 0, echoServer.length());
+					out.newLine();
+					out.flush();
 				}
+
 			}
 			catch (IOException e)
 			{
-				System.out.println("Server client has error:" + e.getMessage());
+				System.out.println(ERROR_STOP_ECHO_SERVER_MESSAGE + e.getMessage());
 			}
 
 		}
 
-	 }
+	}
+
 }
+

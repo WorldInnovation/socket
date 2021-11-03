@@ -7,8 +7,6 @@ import java.net.Socket;
 
 public class ServerRW
 {
-	public static final String ERROR_ECHO_SERVER_MESSAGE = "IOError in echo server:";
-	public static final int BUFFER_CAPACITY = 2048;
 	public static final String ERROR_STOP_ECHO_SERVER_MESSAGE = "IOError when close echo server:";
 	public static final int SOCKET_PORT = 3000;
 
@@ -40,7 +38,7 @@ public class ServerRW
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println(ERROR_STOP_ECHO_SERVER_MESSAGE + e.getMessage());
 		}
 	}
 
