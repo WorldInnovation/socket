@@ -1,51 +1,46 @@
-package com.study;
+package com.study.readWriter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 
-public class Server
-
+public class ServerRW
 {
 	public static final String ERROR_ECHO_SERVER_MESSAGE = "IOError in echo server:";
 	public static final int BUFFER_CAPACITY = 2048;
 	public static final String ERROR_STOP_ECHO_SERVER_MESSAGE = "IOError when close echo server:";
 	public static final int SOCKET_PORT = 3000;
 
+	public ServerRW()
+	{
+	}
+
 
 	public static void echoServerStart(ServerSocket serverSocket)
 	{
 		try (
 				Socket socket = serverSocket.accept();
-				InputStream inputStream = socket.getInputStream();
-				OutputStream outputStream = socket.getOutputStream();
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		)
 		{
-			byte[] buffer = new byte[BUFFER_CAPACITY];
-			int count = inputStream.read(buffer);
+
+			System.out.println("Server start on localhost:3000");
+			String echoMessage = in.readLine();
+			System.out.println("Server got message:" + echoMessage);
 
 			StringBuilder stringBuilder = new StringBuilder("echo: ${");
-
-			char[] echoChar = new char[BUFFER_CAPACITY];
-			for (int i = 0; i < count; i++)
-			{
-				echoChar[i] = (char) buffer[i];
-			}
-
-			String echoMessage = new String(echoChar, 0, count);
 			stringBuilder.append(echoMessage);
 			stringBuilder.append("}");
-			String echoServerResponse = stringBuilder.toString();
+			String echoServer = stringBuilder.toString();
+			out.write(echoServer, 0, echoServer.length());
+			out.flush();
 
-			outputStream.write(echoServerResponse.getBytes(StandardCharsets.UTF_8));
 		}
 		catch (IOException e)
 		{
-			System.out.println(ERROR_ECHO_SERVER_MESSAGE + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -61,8 +56,7 @@ public class Server
 		}
 	}
 
-
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 		try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT))
 		{

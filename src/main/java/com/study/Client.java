@@ -7,9 +7,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
-import static com.study.Server.BUFFER_CAPACITY;
-import static com.study.Server.ERROR_STOP_ECHO_SERVER_MESSAGE;
-
 
 public class Client
 {
@@ -21,16 +18,11 @@ public class Client
 	public static final int SOCKET_PORT = 3000;
 
 
-
-	public Client()
-	{
-	}
-
-	public static void echoClientStart(Socket socket)
+	public static void echoClientStart(Socket socketSetver)
 	{
 		try(
-				OutputStream out = socket.getOutputStream();
-				InputStream in = socket.getInputStream();
+				OutputStream out = socketSetver.getOutputStream();
+				InputStream in = socketSetver.getInputStream();
 				)
 		{
 			out.write("client test".getBytes(StandardCharsets.UTF_8));
@@ -48,11 +40,11 @@ public class Client
 		}
 	}
 
-	public static void echoClientStop(Socket socket)
+	public static void echoClientStop(Socket socketServer)
 	{
 		try
 		{
-			socket.close();
+			socketServer.close();
 		}
 		catch (IOException e)
 		{
