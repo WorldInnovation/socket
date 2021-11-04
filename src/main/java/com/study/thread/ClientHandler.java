@@ -21,7 +21,7 @@ public class ClientHandler implements Runnable
 		try(
 				Scanner scanner = new Scanner(clientSocket.getInputStream());
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-				)
+		)
 		{
 
 			while (scanner.hasNextLine()){
@@ -42,25 +42,6 @@ public class ClientHandler implements Runnable
 			//}
 		}
 
-	/*	try(
-				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-		)
-		{
-			String echoMessage = in.readLine();;
-			//while((echoMessage = in.readLine()) != null)
-			//{
-				System.out.println("Client handler got message:" + echoMessage);
-				StringBuilder stringBuilder = new StringBuilder("echo: ${");
-				stringBuilder.append(echoMessage);
-				stringBuilder.append("}");
-				String echoServer = stringBuilder.toString() + "\n";
-				out.write(echoServer, 0, echoServer.length());
-				out.newLine();
-				out.flush();
-			//}
-
-		}*/
 		catch (IOException e)
 		{
 			//System.out.println(ERROR_STOP_ECHO_SERVER_MESSAGE + e.getMessage());

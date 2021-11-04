@@ -1,6 +1,6 @@
 package com.study.thread;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +15,6 @@ public class ServerThread
 	{
 		try (
 				ServerSocket serverSocket = new ServerSocket(SOCKET_PORT);
-
 		)
 		{
 			System.out.println("Server start on localhost:3000");
