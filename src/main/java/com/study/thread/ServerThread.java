@@ -7,10 +7,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class ServerThread
+public class ServerThread implements UtilsSocketThread
 {
-	public static final int SOCKET_PORT = 3000;
-
 	public static void main(String[] args)
 	{
 		try (
@@ -18,10 +16,10 @@ public class ServerThread
 		)
 		{
 			System.out.println("Server start on localhost:3000");
-			ExecutorService pool = Executors.newCachedThreadPool();
+			ExecutorService pool = Executors.newFixedThreadPool(3);
 			while (true)
 			{
-						Socket socket = serverSocket.accept();
+				Socket socket = serverSocket.accept();
 				{
 					System.out.println("Server have got connection:" + socket.getInetAddress().getHostAddress());
 					ClientHandler clientSocket = new ClientHandler(socket);

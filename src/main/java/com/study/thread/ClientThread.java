@@ -5,23 +5,18 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 
-public class ClientThread
+public class ClientThread implements UtilsSocketThread
 {
-	public static final String ERROR_CLIENT_SOCKET_START = "Error client socket start:";
-	public static final String UNKNOWN_HOST_ERROR = " Unknown host error:";
-	public static final String SOCKET_HOST = "localhost";
-	public static final int SOCKET_PORT = 3000;
 
 	public static void main(String[] args)
 	{
-		try(
+		try (
 				Socket socket = new Socket(SOCKET_HOST, SOCKET_PORT);
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-				)
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		)
 		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
 			String clientMessage = null;
 			while (!"exit".equalsIgnoreCase(clientMessage))
 			{
@@ -33,7 +28,6 @@ public class ClientThread
 				String responseMessage = in.readLine();
 				System.out.println("Response from server:" + responseMessage);
 			}
-
 		}
 		catch (UnknownHostException e)
 		{
