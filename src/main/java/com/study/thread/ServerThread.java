@@ -30,7 +30,7 @@ public class ServerThread implements UtilsSocketThread
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println(UNKNOWN_HOST_ERROR + e.getMessage());
 		}
 	}
 

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static com.study.thread.UtilsSocketThread.ERROR_CLIENT_SOCKET_START;
+
 
 public class ClientHandler implements Runnable
 {
@@ -39,7 +41,7 @@ public class ClientHandler implements Runnable
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println(ERROR_CLIENT_SOCKET_START + e.getMessage());
 		}
 
 	}
